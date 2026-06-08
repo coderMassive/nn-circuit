@@ -1,6 +1,5 @@
 from amaranth import *
-from amaranth.sim import Simulator
-from fixedpoint import *
+from fixedpoint import fixed_mult
 
 class Neuron(Elaboratable):
     def __init__(self, num_inputs):
