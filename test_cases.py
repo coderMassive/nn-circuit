@@ -3,14 +3,15 @@ from amaranth.sim import Simulator
 from fixedpoint import *
 from neuron import Neuron
 from layer import Layer
+from activations import *
 
 # Neuron Test
 
 def test_neuron():
-    dut = Neuron(2)
+    dut = Neuron(num_inputs=2)
     sim = Simulator(dut)
 
-    async def bench_neuron(ctx):
+    async def bench(ctx):
         tests = [[[1, 1], [1, 2]],
                  [[1, -1], [-1, 2]],
                  [[1, -1], [1, -2]],
@@ -29,16 +30,16 @@ def test_neuron():
             actual_val = from_fixed(ctx.get(dut.out))
             assert actual_val == expected_val
 
-    sim.add_testbench(bench_neuron)
+    sim.add_testbench(bench)
     sim.run()
 
 # Layer Test
 
 def test_layer():
-    dut = Layer(num_inputs=2, num_neurons=2, activation=lambda x: x)
+    dut = Layer(num_inputs=2, num_neurons=2)
     sim = Simulator(dut)
 
-    async def bench_layer(ctx):
+    async def bench(ctx):
         inputs = [-2, 0.5]
         weights = [[1, 1], [-0.5, 3]]
 
@@ -57,5 +58,21 @@ def test_layer():
             actual_val = from_fixed(ctx.get(dut.out[l]))
             assert actual_val == expected_val
 
-    sim.add_testbench(bench_layer)
+    sim.add_testbench(bench)
+    sim.run()
+
+# ReLU Test
+
+def test_relu():
+    dut = ReLU(num_inputs=3)
+    sim = Simulator(dut)
+
+    async def bench(ctx):
+        inputs = [-5, 0, 5]
+        for i in range(3):
+            ctx.set(dut.inputs[i], to_fixed(inputs[i]))
+        for j in range(3):
+            assert from_fixed(ctx.get(dut.outputs[j])) == max(0, inputs[j])
+
+    sim.add_testbench(bench)
     sim.run()

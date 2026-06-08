@@ -3,8 +3,8 @@
 - Fixed point helper functions
 - Neuron module
 - Layer module
-### Roadmap:
 - ReLU module
+### Roadmap:
 - Network module
 - Pytorch training script that loads weights into network
 - Trainer module
