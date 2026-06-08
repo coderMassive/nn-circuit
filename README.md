@@ -1,9 +1,10 @@
 # Neural Network in Amaranth
 ### Currently Implemented:
 - Fixed point helper functions
-- Neuron
-- Layer
+- Neuron module
+- Layer module
 ### Roadmap:
-- ReLU
-- Network
-- Trainer
+- ReLU module
+- Network module
+- Pytorch training script that loads weights into network
+- Trainer module
